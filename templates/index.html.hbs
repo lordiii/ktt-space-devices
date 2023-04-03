@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Space Devices</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="../images/favicon.ico"/>
+</head>
+<body class="h-100 d-flex flex-column bg-dark-subtle" data-bs-theme="dark">
+
+<div class="bg-dark pt-2">
+    <h3 class="text-center fw-bold">
+        {{ user_alias }} <span class="fw-normal fs-4">[{{ device_alias }}]</span>
+    </h3>
+    <p class="text-center text-light">
+        Deine Mac-Adresse lautet: {{ mac_address }}
+    </p>
+</div>
+
+{{#if has_data}}
+    <div class="container my-1">
+        <div class="border-bottom">
+            <div class="row pb-1">
+                <div class="col d-flex justify-content-center justify-content-md-between">
+                    <p class="align-self-center mb-0 fw-bold text-light fs-5">
+                        Anzeigename
+                    </p>
+                    <p class="align-self-center mb-0 text-end d-none d-md-block">
+                        Ändere deine Anzeigenamen auf
+                        <a class="text-dark-emphasis" target="_blank" href="https://status.ktt-ol.de">Status</a>
+                    </p>
+                </div>
+            </div>
+            <div class="row d-block d-md-none">
+                <div class="col">
+                    <p class="align-self-center mb-0 text-center">
+                        Ändere deine Anzeigenamen auf
+                        <a class="text-dark-emphasis" target="_blank" href="https://status.ktt-ol.de">Status</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <form class="mt-2" action="device-settings" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="inputAlias" class="form-label">
+                            Name/Alias
+                        </label>
+                        <input type="text" class="form-control text-dark" name="user_alias" id="inputAlias"
+                               value="{{ user_alias }}">
+                        <div id="inputAliasHelp" class="form-text">Dein gewünschter Name oder Alias</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="inputDeviceName" class="form-label">
+                            Gerätename
+                        </label>
+                        <input type="text" class="form-control text-dark" name="device_alias" id="inputDeviceName"
+                               value="{{ device_alias }}">
+                        <div id="inputDeviceNameHelp" class="form-text">Der gewünschte Name dieses Gerätes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex justify-content-between">
+                        <label class="form-label">
+                            Sichtbarkeit
+                        </label>
+                        <a class="text-end text-dark-emphasis" data-bs-toggle="modal"
+                           data-bs-target="#visibilityHelpModal">
+                            Hilfe! Was heißt das?
+                        </a>
+                    </div>
+                    {{#each visibility_options as |option| }}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="visibility" value="{{option.value}}"
+                                   id={{option.id}} {{#if option.checked}}checked{{/if}}>
+                            <label class="form-check-label" for={{option.id}}>
+                                {{option.description}}
+                            </label>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col text-end">
+                    <button class="btn btn-light" type="submit">
+                        Speichern
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{{else}}
+    <div class="d-flex h-100 justify-content-center">
+        <h5 class="text-center pt-4">
+            Dein Gerät wurde nicht erkannt.<br>
+            Bitte versuche es in ein paar Sekunden erneut!
+        </h5>
+    </div>
+{{/if}}
+<footer class="fixed-bottom text-center bg-dark py-3">
+    <p>
+        Providing names for {{device_count}} devices
+    </p>
+    <a class="col text-dark-emphasis" target="_blank" href="https://github.com/ktt-ol/spaceDevices">
+        https://github.com/ktt-ol/spaceDevices
+    </a>
+</footer>
+
+<!-- Modal -->
+<div class="modal fade" id="visibilityHelpModal" tabindex="-1" aria-labelledby="visibilityHelpModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="visibilityHelpModalLabel">
+                    Ein Beispiel aus der <a target="_blank" class="text-dark-emphasis" href="https://status.ktt-ol.de">Status</a>
+                    Seite.
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+
+
+                    <div class="img-responsive">
+                        <img alt="Beispielbild der Statusseite" src="images/example.jpg" class="img-thumbnail">
+                    </div>
+
+                    <ul>
+                        <li class="my-1">
+                            Mit "Alles anzeigen, d.h. Name/Alias und Gerätename." wirst du in A1 und A2 angezeigt.
+                        </li>
+                        <li class="my-1">
+                            Mit "Mit Name/Alias anzeigen." wirst du nur in A1
+                            angezeigt.
+                        </li>
+                        <li class="my-1">
+                            Mit "Als anonyme Person anzeigen." wirst du in B angezeigt.
+                        </li>
+                        <li class="my-1">
+                            Wenn du noch gar nichts eingetragen hast oder "Eintrag löschen" gewählt hast, dann wirst du
+                            in C angezeigt.
+                        </li>
+                        <li class="my-1">
+                            Mit "Gar nicht anzeigen" wirst du nirgends angezeigt.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/bootstrap.bundle.js"></script>
+</body>
+</html>
